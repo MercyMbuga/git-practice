@@ -1,14 +1,15 @@
 name: Deploy to EC2
 
-on:
-  push:
-    branches:
-      - master
+on: 
+ workflow_run:
+    workflows: ["Docker CI"]
+     types:
+      - completed
 
-jobs:
+ jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Connect to EC2
         run: |
